@@ -1,0 +1,52 @@
+.PokemonContainer {
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 3px;
+  margin-top: 5%;
+}
+.PokemonContainer button,
+.buttons-container button {
+  color: white;
+  border-radius: 3px;
+  border: none;
+  height: 30px;
+  width: 100px;
+  padding: 3%;
+  box-shadow: 1px 2px black;
+}
+
+button:disabled {
+  color: red;
+  cursor: not-allowed;
+}
+
+.pokemon-image {
+  width: 50%;
+}
+
+.buttons-container {
+  display: flex;
+  justify-content: space-evenly;
+  margin-top: 3%;
+}
+
+.buttons-container .dislike {
+  background-color: rgb(207, 5, 5);
+  margin-right: 5%;
+}
+
+.buttons-container .like {
+  background-color: rgb(70, 208, 6);
+}
+.clear {
+  display: flex;
+  justify-content: center;
+}
+.clear button {
+  margin-top: 3%;
+  background-color: red;
+}

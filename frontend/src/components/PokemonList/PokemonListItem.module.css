@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 20px;
+  border: 2px solid rgb(0, 123, 255);
+  padding: 3%;
+  margin-top: 3%;
+}
+.container .clear-button {
+  background-color: rgb(250, 35, 35);
+  border: none;
+  border-radius: 3px;
+  box-sizing: 1px 5px black;
+  width: 30px;
+  height: 20px;
+}
