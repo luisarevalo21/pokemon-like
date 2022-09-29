@@ -39,6 +39,8 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(express.static("build"));
+
 // app.use(methodOverride("_method"));
 
 const pool = require("./db/index.js");
