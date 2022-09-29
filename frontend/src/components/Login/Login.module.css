@@ -1,0 +1,35 @@
+.login {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+
+  width: 50%;
+  margin: 0 auto;
+}
+
+.login input {
+  height: 25px;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+a {
+  color: rgb(11, 1, 1);
+  text-decoration: none;
+}
+.login button {
+  width: 50%;
+  color: rgb(11, 1, 1);
+  border: none;
+  background-color: rgb(2, 225, 35);
+  margin: 0 auto;
+  margin-bottom: 3%;
+}
+
+.login button:hover {
+  cursor: pointer;
+}

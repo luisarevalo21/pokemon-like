@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import PokemonDetails from "../PokemonDetails/PokemonDetails";
 import PokemonList from "../PokemonList/PokemonList";
 import styles from "./PokemonContainer.module.css";
+import Header from "../Header/Header";
 import {
   clearLikedPokemon,
   fetchPokemon,
   fetchLikedPokemon as liked,
   postLikedPokemon as postPokemon,
   deleteSinglePokemon,
+  logout,
 } from "../../api/index";
+import Container from "../Container";
 
 const PokemonContainer = props => {
   const [pokemon, setPokemon] = useState(null);
   const [likedPokemon, setLikedPokemon] = useState([]);
   const [disableButton, setDisabledButton] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const setup = async () => {
@@ -34,7 +38,7 @@ const PokemonContainer = props => {
 
   const postLikedPokemon = async pokemon => {
     const result = await postPokemon(pokemon);
-    setLikedPokemon(result);
+    if (result) setLikedPokemon(result);
   };
 
   const handleLike = async pokemon => {
@@ -61,7 +65,16 @@ const PokemonContainer = props => {
     setLikedPokemon(result);
   };
 
+  const handleLogout = async () => {
+    const response = await logout();
+    if (response.ok) {
+      props.handleLogout();
+      navigate("/");
+    }
+  };
+
   let pokemonDetails = null;
+  let likedPokemonList = null;
   if (pokemon)
     pokemonDetails = (
       <PokemonDetails
@@ -72,15 +85,23 @@ const PokemonContainer = props => {
         disableButton={disableButton}
       />
     );
-
-  return (
-    <div className={styles.pokeContainer}>
-      {pokemonDetails}
+  if (likedPokemon) {
+    likedPokemonList = (
       <PokemonList
         likedPokemon={likedPokemon}
         handleDeletePokemon={handleDeleteSinglePokemon}
       />
-    </div>
+    );
+  }
+
+  return (
+    <Container>
+      <div className={styles.pokeContainer}>
+        <Header handleLogout={handleLogout} />
+        {pokemonDetails}
+        {likedPokemonList}
+      </div>
+    </Container>
   );
 };
 

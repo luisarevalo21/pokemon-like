@@ -7,3 +7,7 @@ export const randomNumber = () => {
 export const captalzieFirstLetter = name => {
   return name[0].toUpperCase() + name.slice(1);
 };
+
+export const checkPasswordSize = password => {
+  return password.length > 5;
+};
