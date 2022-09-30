@@ -78,7 +78,7 @@ export const deleteLikedPokemon = async id => {
 };
 
 export const login = user => {
-  return fetch("login", {
+  return fetch("/login", {
     method: "POST",
 
     credentials: "include",
@@ -96,7 +96,7 @@ export const login = user => {
     });
 };
 export const signup = user => {
-  return fetch("register", {
+  return fetch("/register", {
     method: "POST",
     body: JSON.stringify(user),
     credentials: "include",
@@ -111,5 +111,5 @@ export const signup = user => {
 };
 
 export const logout = () => {
-  return fetch("logout", { method: "POST" }).then(res => res);
+  return fetch("/logout", { method: "POST" }).then(res => res);
 };
