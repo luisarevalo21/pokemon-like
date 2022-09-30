@@ -7,6 +7,7 @@ import { useState } from "react";
 function App() {
   const [userId, setUserId] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  console.log("user id", userId);
   const handleUserId = id => {
     setUserId(id);
     setIsLoggedIn(true);

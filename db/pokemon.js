@@ -18,26 +18,6 @@ const getLikedPokemon = (req, res) => {
   );
 };
 
-// const getLikedPokemon = (req, res, next) => {
-//   const { userId } = req.params;
-//   console.log("USER", userId);
-//   console.log("GET LIKED TRIGGERED");
-
-//   pool.query(
-//     "SELECT * FROM pokemon WHERE user_id = $1",
-//     [userId],
-//     (error, results) => {
-//       if (error) return next(error);
-
-//       if (results.rows.length === 0) {
-//         return res.json(null);
-//       }
-
-//       // console.log("results", results);
-//       res.status(200).json(results.rows);
-//     }
-//   );
-
 const postLikedPokemon = (req, res, next) => {
   console.log("RWQ USER inside post liekd", req.user);
 
@@ -76,6 +56,8 @@ const deleteSinglePokemon = (req, res, next) => {
 
 const clearLikedPokemon = (req, res, next) => {
   const userId = req.user;
+  console.log("clear liekd pokemon triggered");
+  console.log("userid", userId);
   pool.query(
     "DELETE FROM pokemon WHERE user_id = $1",
     [userId],

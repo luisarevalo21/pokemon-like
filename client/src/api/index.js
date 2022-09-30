@@ -1,6 +1,6 @@
 import { randomNumber } from "../util";
 
-const baseURL = "pokemon";
+const baseURL = `http://localhost:8000/pokemon`;
 
 export const fetchPokemon = async () => {
   const pokemonNumber = randomNumber();
@@ -17,7 +17,7 @@ export const fetchPokemon = async () => {
 };
 
 export const fetchLikedPokemon = async (pokemon = null) => {
-  return fetch(baseURL, {
+  return fetch(`http://localhost:8000/pokemon`, {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export const fetchLikedPokemon = async (pokemon = null) => {
 };
 
 export const postLikedPokemon = pokemon => {
-  return fetch(baseURL, {
+  return fetch(`http://localhost:8000/pokemon`, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -49,7 +49,7 @@ export const postLikedPokemon = pokemon => {
 };
 
 export const deleteSinglePokemon = dexnumber => {
-  return fetch(baseURL / dexnumber, {
+  return fetch(`http://localhost:8000/pokemon/${dexnumber}`, {
     method: "DELETE",
     credentials: "include",
   })
@@ -62,7 +62,15 @@ export const deleteSinglePokemon = dexnumber => {
 };
 
 export const clearLikedPokemon = async () => {
-  fetch(baseURL, { method: "DELETE" }, { credentials: "include" })
+  return fetch("http://localhost:8000/pokemon", {
+    method: "DELETE",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "Access-Control-Allow-Origin": "http://localhost:3000/",
+    },
+  })
     .then(res => {
       if (res.ok) {
         return res;
@@ -78,7 +86,7 @@ export const deleteLikedPokemon = async id => {
 };
 
 export const login = user => {
-  return fetch("/login", {
+  return fetch(`http://localhost:8000/login`, {
     method: "POST",
 
     credentials: "include",
@@ -96,7 +104,7 @@ export const login = user => {
     });
 };
 export const signup = user => {
-  return fetch("/register", {
+  return fetch(`http://localhost:8000/register`, {
     method: "POST",
     body: JSON.stringify(user),
     credentials: "include",
@@ -111,5 +119,7 @@ export const signup = user => {
 };
 
 export const logout = () => {
-  return fetch("/logout", { method: "POST" }).then(res => res);
+  return fetch("http://localhost:8000/pokemon/logout", { method: "POST" }).then(
+    res => res
+  );
 };

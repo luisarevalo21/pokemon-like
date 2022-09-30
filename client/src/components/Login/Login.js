@@ -30,6 +30,7 @@ const Login = props => {
 
     setPassword("");
     setUsername("");
+    console.log("response", response);
     if (response !== "login") {
       props.handleUserId(response);
       navigate("/pokemon");

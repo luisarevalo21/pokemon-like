@@ -39,7 +39,7 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static("build"));
+// app.use(express.static("build"));
 
 // app.use(methodOverride("_method"));
 
@@ -52,38 +52,6 @@ const {
   clearLikedPokemon,
   getLikedPokemon,
 } = require("./db/pokemon");
-// const pokemonRouter = require("./routes/pokemonRoute");
-//passport.use(
-// new LocalStrategy(function (username, password, cb) {
-//   pool.query(
-//     "SELECT * FROM users WHERE username = $1",
-//     [username],
-//     (err, row) => {
-//       if (err) return cb(err);
-
-//       if (row.rows.length === 0) {
-//         return cb(null, false, {
-//           message: "Incorrect username or password.",
-//         });
-//       }
-
-//       if (username !== row.rows[0].username) {
-//         return cb(null, false);
-//       }
-//       if (!bcrypt.compare(password, row.rows[0].password)) {
-//         return cb(null, false);
-//       }
-//       return cb(null, row.rows[0]);
-//     }
-//   );
-// })
-//);
-
-// passport.serializeUser((user, done) => done(null, user.id));
-// passport.deserializeUser((id, done) => {
-//   console.log("de serivliased called");
-//   return done(null, id);
-// });
 
 app.post(
   "/login",
@@ -132,6 +100,9 @@ app.get("/login", (req, res) => {
   return res.json("login");
 });
 
+app.get("/signup", (req, res) => {
+  return res.json("signup");
+});
 app.get("/profile", (req, res, next) => {
   // console.log("profile triggered");
   console.log("REQ USER", req.user);

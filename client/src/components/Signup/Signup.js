@@ -27,6 +27,7 @@ const Signup = props => {
       };
 
       const response = await signup(user);
+      console.log("response", response);
       setPassword("");
       setUsername("");
       if (response.error) {
