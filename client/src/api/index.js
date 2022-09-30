@@ -1,6 +1,6 @@
 import { randomNumber } from "../util";
 
-const baseURL = `http://localhost:8000/pokemon`;
+const baseURL = "pokemon";
 
 export const fetchPokemon = async () => {
   const pokemonNumber = randomNumber();
@@ -17,7 +17,7 @@ export const fetchPokemon = async () => {
 };
 
 export const fetchLikedPokemon = async (pokemon = null) => {
-  return fetch(`http://localhost:8000/pokemon`, {
+  return fetch(baseURL, {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
@@ -30,7 +30,7 @@ export const fetchLikedPokemon = async (pokemon = null) => {
 };
 
 export const postLikedPokemon = pokemon => {
-  return fetch(`http://localhost:8000/pokemon`, {
+  return fetch(baseURL, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -49,7 +49,7 @@ export const postLikedPokemon = pokemon => {
 };
 
 export const deleteSinglePokemon = dexnumber => {
-  return fetch(`http://localhost:8000/pokemon/${dexnumber}`, {
+  return fetch(baseURL / dexnumber, {
     method: "DELETE",
     credentials: "include",
   })
@@ -78,7 +78,7 @@ export const deleteLikedPokemon = async id => {
 };
 
 export const login = user => {
-  return fetch(`http://localhost:8000/login`, {
+  return fetch("/login", {
     method: "POST",
 
     credentials: "include",
@@ -96,7 +96,7 @@ export const login = user => {
     });
 };
 export const signup = user => {
-  return fetch(`http://localhost:8000/register`, {
+  return fetch("/register", {
     method: "POST",
     body: JSON.stringify(user),
     credentials: "include",
@@ -111,7 +111,5 @@ export const signup = user => {
 };
 
 export const logout = () => {
-  return fetch("http://localhost:8000/pokemon/logout", { method: "POST" }).then(
-    res => res
-  );
+  return fetch("/logout", { method: "POST" }).then(res => res);
 };
