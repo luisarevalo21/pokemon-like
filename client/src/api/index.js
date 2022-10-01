@@ -111,7 +111,8 @@ export const signup = user => {
 };
 
 export const logout = () => {
-  return fetch("http://localhost:8000/pokemon/logout", { method: "POST" }).then(
-    res => res
-  );
+  return fetch("http://localhost:8000/pokemon/logout", {
+    method: "DELETE",
+    credentials: "same-origin",
+  });
 };

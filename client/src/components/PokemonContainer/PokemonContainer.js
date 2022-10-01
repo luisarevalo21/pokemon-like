@@ -66,7 +66,10 @@ const PokemonContainer = props => {
   };
 
   const handleLogout = async () => {
+    //error is here
+    console.log("handle logout triggered in container");
     const response = await logout();
+    console.log("response", response);
     if (response.ok) {
       props.handleLogout();
       navigate("/");

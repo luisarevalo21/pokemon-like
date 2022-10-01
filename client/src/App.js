@@ -1,11 +1,19 @@
 import PokemonContainer from "./components/PokemonContainer/PokemonContainer";
-import { NavLink, Route, Routes, Navigate } from "react-router-dom";
+import {
+  NavLink,
+  Route,
+  Routes,
+  Navigate,
+  useNavigate,
+} from "react-router-dom";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
   const [userId, setUserId] = useState("");
+  const navigate = useNavigate();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const handleUserId = id => {
     setUserId(id);
@@ -13,8 +21,10 @@ function App() {
   };
 
   const handleLogout = () => {
+    console.log("logout triggered");
     setUserId("");
     setIsLoggedIn(false);
+    navigate("/");
   };
 
   const Protected = ({ isLoggedIn, children }) => {
@@ -50,9 +60,9 @@ function App() {
         <Route
           path="/pokemon"
           element={
-            <Protected isLoggedIn={isLoggedIn}>
-              <PokemonContainer userId={userId} handleLogout={handleLogout} />
-            </Protected>
+            // <Protected isLoggedIn={isLoggedIn}>
+            <PokemonContainer userId={userId} handleLogout={handleLogout} />
+            // </Protected>
           }
         ></Route>
 
