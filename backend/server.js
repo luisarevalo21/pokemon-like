@@ -12,6 +12,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require("uuid");
 
+const methodOverride = require("method-override");
 // const flash = require("express-flash");
 const session = require("express-session");
 const LocalStrategy = require("passport-local").Strategy;
@@ -23,6 +24,7 @@ const initializePassport = require("./passport-config");
 initializePassport(passport);
 
 app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+
 // app.use(cors()); // Enable CORS
 app.use(express.json()); // Recognize Request Objects as JSON objects
 app.use(express.static("build")); // serve static files (css & js) from the 'public' directory
@@ -40,8 +42,6 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static("build"));
-
-// app.use(methodOverride("_method"));
 
 const pool = require("./db/index.js");
 
@@ -138,13 +138,28 @@ app.get("/profile", (req, res, next) => {
   res.json(req.user);
 });
 
-app.post("/pokemon/logout", (req, res, next) => {
-  console.log("logout triggred");
-  req.logout((err, result) => {
-    if (err) return next(err);
+app.delete("/pokemon/logout", (req, res, next) => {
+  console.log("LOGOUT TRIGGERED ");
+  req.session.destroy(err => {
+    if (err) {
+      return nexterr;
+    }
 
-    res.redirect("/login");
+    res.clearCookie("connect.sid");
+    res.sendStatus(200);
   });
+  // req.session.destroy(function (err) {
+  //   if (err) {
+  //     return next(err);
+  //   }
+  //   res.sendStatus(200); //Inside a callback… bulletproof!
+  // });
+  // req.logOut(err => {
+  //   if (err) {
+  //     return next(err);
+  //   }
+  // res.sendStatus(200);
+  // });
 
   // res.redirect("/");
   // res.json("logout");
@@ -166,7 +181,10 @@ const checkIsNotAuthenticated = (req, res, next) => {
   next();
 };
 
-// app.get("/pokemon", checkIsAuthenticated, getPokemon);
+// app.get("/", checkIsAuthenticated, (req, res) => {
+//   console.log("get called");
+//   res.json(req.user);
+// });
 app.get("/pokemon", checkIsAuthenticated, getLikedPokemon);
 
 app.post("/pokemon", checkIsAuthenticated, postLikedPokemon);

@@ -10,6 +10,10 @@ function initalize(passport) {
         "SELECT * from users WHERE username = $1",
         [username]
       );
+      if (response.rows[0] === undefined) {
+        console.log("inside if statement");
+        return done(null, false, { message: "No user with that email" });
+      }
       console.log("response", response.rows[0]);
       const user = response.rows[0];
 
@@ -19,7 +23,7 @@ function initalize(passport) {
         return done(null, false);
       }
     } catch (err) {
-      return done(err);
+      return done(err, false, { message: "No user with that email" });
     }
   };
 
@@ -27,11 +31,10 @@ function initalize(passport) {
 
   passport.serializeUser((user, done) => {
     console.log("inside serialized called");
-
     done(null, user.id);
   });
   passport.deserializeUser(async (id, done) => {
-    console.log("inside deserialzie");
+    console.log("deserialize user called");
     try {
       const response = await pool.query("SELECT * from users WHERE id = $1", [
         id,
