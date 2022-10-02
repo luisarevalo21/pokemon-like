@@ -17,18 +17,27 @@ const jwt = require("jsonwebtoken");
 const session = require("express-session");
 const LocalStrategy = require("passport-local").Strategy;
 
+const path = require("path");
+
 // const methodOverride = require("method-override");
 
 const initializePassport = require("./passport-config");
 
 initializePassport(passport);
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cors());
 // app.use(cors()); // Enable CORS
 app.use(express.json()); // Recognize Request Objects as JSON objects
 app.use(express.static("build")); // serve static files (css & js) from the 'public' directory
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// Step 1:
+app.use(express.static(path.resolve(__dirname, "./client/build")));
+// Step 2:
+app.get("*", function (request, response) {
+  response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
+});
 
 app.use(
   session({
