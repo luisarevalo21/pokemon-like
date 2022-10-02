@@ -19,12 +19,13 @@ export const fetchPokemon = async () => {
 };
 
 export const fetchLikedPokemon = async (pokemon = null) => {
-  return fetch(`http://localhost:8000/pokemon`, {
+  return fetch(heroku + "pokemon", {
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
+      // "Access-Control-Allow-Origin": "http://localhost:3000/",
+      "Access-Control-Allow-Origin": heroku,
     },
   })
     .then(res => res.json())
@@ -34,13 +35,14 @@ export const fetchLikedPokemon = async (pokemon = null) => {
 };
 
 export const postLikedPokemon = pokemon => {
-  return fetch(`http://localhost:8000/pokemon`, {
+  return fetch(heroku + "pokemon", {
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
+      // "Access-Control-Allow-Origin": "http://localhost:3000/",
+      "Access-Control-Allow-Origin": heroku,
     },
     body: JSON.stringify(pokemon),
   })
@@ -53,7 +55,7 @@ export const postLikedPokemon = pokemon => {
 };
 
 export const deleteSinglePokemon = dexnumber => {
-  return fetch(`http://localhost:8000/pokemon/${dexnumber}`, {
+  return fetch(`${heroku}/pokemon/${dexnumber}`, {
     method: "DELETE",
     credentials: "include",
   })
@@ -66,13 +68,15 @@ export const deleteSinglePokemon = dexnumber => {
 };
 
 export const clearLikedPokemon = async () => {
-  return fetch("http://localhost:8000/pokemon", {
+  return fetch(heroku + "/pokemon", {
     method: "DELETE",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
+      // "Access-Control-Allow-Origin": "http://localhost:3000/",
+
+      "Access-Control-Allow-Origin": heroku,
     },
   })
     .then(res => {
@@ -85,7 +89,7 @@ export const clearLikedPokemon = async () => {
 
 export const deleteLikedPokemon = async id => {
   console.log("Id", id);
-  const response = await fetch(`${baseURL}/${id}`, { method: "DELETE" })
+  const response = await fetch(`${heroku}/${id}`, { method: "DELETE" })
     .then(res => res.json())
     .then(data => {
       if (checkUserAuthenticated(data)) {
@@ -104,7 +108,8 @@ export const login = user => {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
+      // "Access-Control-Allow-Origin": "http://localhost:3000/",
+      "Access-Control-Allow-Origin": heroku,
     },
     body: JSON.stringify(user),
   })
@@ -115,14 +120,15 @@ export const login = user => {
     });
 };
 export const signup = user => {
-  return fetch(`http://localhost:8000/register`, {
+  return fetch(heroku + "/register", {
     method: "POST",
     body: JSON.stringify(user),
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
+      // "Access-Control-Allow-Origin": "http://localhost:3000/",
+      "Access-Control-Allow-Origin": heroku,
     },
   })
     .then(res => res.json())
@@ -130,7 +136,5 @@ export const signup = user => {
 };
 
 export const logout = () => {
-  return fetch("http://localhost:8000/pokemon/logout", { method: "POST" }).then(
-    res => res
-  );
+  return fetch(heroku + "pokemon/logout", { method: "POST" }).then(res => res);
 };
