@@ -10,7 +10,7 @@ const Pool = require("pg").Pool;
 // const = require("pg");
 const connectionString = process.env.DATABASE_URL;
 const pool = new Pool({
-  connectionString: connectionString,
+  connectionString: connectionString + "?sll=true",
 });
 
 // const pool = new Pool({
