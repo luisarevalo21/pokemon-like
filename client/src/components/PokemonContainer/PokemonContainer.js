@@ -12,6 +12,7 @@ import {
   deleteSinglePokemon,
   logout,
 } from "../../api/index";
+import { checkUserAuthenticated } from "../../util";
 import Container from "../Container";
 
 const PokemonContainer = props => {
@@ -23,7 +24,9 @@ const PokemonContainer = props => {
   useEffect(() => {
     const setup = async () => {
       const result = await fetchPokemon();
+      // console.log(result);
       setPokemon(result);
+
       fetchLikedPokemon();
     };
     setup();
@@ -33,12 +36,27 @@ const PokemonContainer = props => {
 
   const fetchLikedPokemon = async (pokemon = null) => {
     const result = await liked(pokemon);
+    console.log("result in fetched liked pokemon ", result);
+
+    if (checkUserAuthenticated(result)) {
+      props.handleLogout();
+      setLikedPokemon([]);
+
+      return;
+    }
     setLikedPokemon(result);
   };
 
   const postLikedPokemon = async pokemon => {
     const result = await postPokemon(pokemon);
-    if (result) setLikedPokemon(result);
+    if (checkUserAuthenticated(result)) {
+      props.handleLogout();
+      setLikedPokemon([]);
+
+      return;
+    }
+
+    setLikedPokemon(result);
   };
 
   const handleLike = async pokemon => {
@@ -62,6 +80,12 @@ const PokemonContainer = props => {
 
   const handleDeleteSinglePokemon = async dexnumber => {
     const result = await deleteSinglePokemon(dexnumber);
+    if (checkUserAuthenticated(result)) {
+      props.handleLogout();
+      setLikedPokemon([]);
+
+      return;
+    }
     setLikedPokemon(result);
   };
 

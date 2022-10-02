@@ -12,6 +12,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const { v4: uuidv4 } = require("uuid");
 
+const jwt = require("jsonwebtoken");
 // const flash = require("express-flash");
 const session = require("express-session");
 const LocalStrategy = require("passport-local").Strategy;
@@ -55,10 +56,19 @@ const {
 
 app.post(
   "/login",
-  passport.authenticate("local", {
-    failureRedirect: "/login",
-    successRedirect: "/profile",
-  })
+  passport.authenticate(
+    "local",
+    // { session: false },
+    // (req, res) => {
+    //   console.log(req.user);
+    //   // const token = jwt.sign({ id: req.user.id }, "jwt_secret");
+    //   // res.json({ token: token });
+    // },
+    {
+      failureRedirect: "/error",
+      successRedirect: "/profile",
+    }
+  )
 );
 
 app.post("/register", (req, res, next) => {
@@ -88,7 +98,10 @@ app.post("/register", (req, res, next) => {
           [id, username, hashedPassword]
         );
 
-        res.json(response.rows[0].id);
+        // Token
+        const token = jwt.sign({ id: response.rows[0].id }, "jwt_secret");
+        res.json({ token: token });
+        // res.json(response.rows[0].id);
       } catch (err) {
         console.log(err);
       }
@@ -96,17 +109,16 @@ app.post("/register", (req, res, next) => {
   );
 });
 
-app.get("/login", (req, res) => {
-  return res.json("login");
-});
-
-app.get("/signup", (req, res) => {
-  return res.json("signup");
-});
 app.get("/profile", (req, res, next) => {
   // console.log("profile triggered");
   console.log("REQ USER", req.user);
-  res.json(req.user);
+  const token = jwt.sign({ id: req.user.id }, "jwt_secret");
+  res.json({ token: token });
+});
+
+app.get("/error", (req, res, next) => {
+  console.log("redirected to /");
+  res.json("login");
 });
 
 app.post("/pokemon/logout", (req, res, next) => {
@@ -128,11 +140,11 @@ const checkIsAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
-  res.redirect("/login");
+  res.redirect("/error");
 };
 const checkIsNotAuthenticated = (req, res, next) => {
   if (req.isAuthenticated()) {
-    return res.redirect("/");
+    return res.redirect("/error");
   }
   next();
 };
@@ -143,6 +155,14 @@ app.get("/pokemon", checkIsAuthenticated, getLikedPokemon);
 app.post("/pokemon", checkIsAuthenticated, postLikedPokemon);
 app.delete("/pokemon/:id", checkIsAuthenticated, deleteSinglePokemon);
 app.delete("/pokemon", checkIsAuthenticated, clearLikedPokemon);
+
+app.get("/login", checkIsNotAuthenticated, (req, res) => {
+  return res.json("login");
+});
+
+app.get("/signup", checkIsNotAuthenticated, (req, res) => {
+  return res.json("signup");
+});
 
 app.listen(PORT, () => {
   console.log("listening on port", PORT);

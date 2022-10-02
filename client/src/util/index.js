@@ -11,3 +11,8 @@ export const captalzieFirstLetter = name => {
 export const checkPasswordSize = password => {
   return password.length > 5;
 };
+
+export const checkUserAuthenticated = response => {
+  console.log("response", response);
+  return response === "login";
+};

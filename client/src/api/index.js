@@ -1,4 +1,4 @@
-import { randomNumber } from "../util";
+import { randomNumber, checkUserAuthenticated } from "../util";
 
 const baseURL = `http://localhost:8000/pokemon`;
 
@@ -26,7 +26,9 @@ export const fetchLikedPokemon = async (pokemon = null) => {
     },
   })
     .then(res => res.json())
-    .then(data => data);
+    .then(data => {
+      return data;
+    });
 };
 
 export const postLikedPokemon = pokemon => {
@@ -81,7 +83,14 @@ export const clearLikedPokemon = async () => {
 
 export const deleteLikedPokemon = async id => {
   console.log("Id", id);
-  const response = await fetch(`${baseURL}/${id}`, { method: "DELETE" });
+  const response = await fetch(`${baseURL}/${id}`, { method: "DELETE" })
+    .then(res => res.json())
+    .then(data => {
+      if (checkUserAuthenticated(data)) {
+        return;
+      }
+      return;
+    });
   console.log(response);
 };
 

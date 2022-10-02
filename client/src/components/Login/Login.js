@@ -26,11 +26,13 @@ const Login = props => {
     };
     const response = await login(user);
 
-    // console.log("response", response);
+    console.log("response", response);
 
     setPassword("");
     setUsername("");
-    console.log("response", response);
+    // console.log("response", response);
+    localStorage.setItem("token", response.token);
+
     if (response !== "login") {
       props.handleUserId(response);
       navigate("/pokemon");
