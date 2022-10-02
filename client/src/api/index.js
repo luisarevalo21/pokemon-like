@@ -101,7 +101,7 @@ export const deleteLikedPokemon = async id => {
 };
 
 export const login = user => {
-  return fetch(heroku + "/login", {
+  return fetch(heroku + "login", {
     method: "POST",
 
     credentials: "include",
@@ -120,7 +120,7 @@ export const login = user => {
     });
 };
 export const signup = user => {
-  return fetch(heroku + "/register", {
+  return fetch(heroku + "register", {
     method: "POST",
     body: JSON.stringify(user),
     credentials: "include",
