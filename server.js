@@ -32,6 +32,13 @@ app.use(express.static("build")); // serve static files (css & js) from the 'pub
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+if (process.env.NODE_ENV === "production") {
+  //also works because index.js is in the root and goes into client and into build
+  // app.use(express.static("client/build"));
+
+  app.use(express.static(path.join(__dirname, "client/build")));
+}
+console.log(__dirname);
 // Step 1:
 // app.use(express.static(path.resolve(__dirname, "./client/build")));
 // // Step 2:
@@ -171,6 +178,10 @@ app.get("/login", checkIsNotAuthenticated, (req, res) => {
 
 app.get("/signup", checkIsNotAuthenticated, (req, res) => {
   return res.json("signup");
+});
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client/build/index.html"));
 });
 
 app.listen(PORT, () => {
