@@ -166,7 +166,7 @@ const checkIsNotAuthenticated = (req, res, next) => {
 };
 
 // app.get("/pokemon", checkIsAuthenticated, getPokemon);
-app.get("/pokemon", checkIsAuthenticated, getLikedPokemon);
+app.get("/pokemon", getLikedPokemon);
 
 app.post("/pokemon", checkIsAuthenticated, postLikedPokemon);
 app.delete("/pokemon/:id", checkIsAuthenticated, deleteSinglePokemon);
