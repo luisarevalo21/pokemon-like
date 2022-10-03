@@ -2,8 +2,8 @@
   "name": "backend",
   "version": "1.0.0",
   "engines": {
-    "node ": "16.x",
-    "npm": "8.5.4"
+    "node ": "16.X",
+    "npm": "8.X"
   },
   "description": "",
   "main": "server.js",
