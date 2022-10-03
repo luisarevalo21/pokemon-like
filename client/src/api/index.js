@@ -1,9 +1,5 @@
 import { randomNumber, checkUserAuthenticated } from "../util";
 
-const baseURL = `http://localhost:8000/pokemon`;
-
-const heroku = "https://favorite-pokemon.herokuapp.com/";
-
 export const fetchPokemon = async () => {
   const pokemonNumber = randomNumber();
   return fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNumber}`)
