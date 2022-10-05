@@ -47,7 +47,7 @@ if (process.env.NODE_ENV === "production") {
   //also works because index.js is in the root and goes into client and into build
   // app.use(express.static("client/build"));
 
-  app.use(express.static(path.join(__dirname, "client/build/index.html")));
+  app.use(express.static(path.join(__dirname, "client/build")));
 }
 // Step 1:
 // app.use(express.static(path.resolve(__dirname, "./client/build")));
