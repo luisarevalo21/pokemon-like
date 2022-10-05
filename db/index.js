@@ -10,11 +10,11 @@ const devConfig = {
 };
 
 const productionConfig = {
-  connectionString: process.env.DATABASE_URL + "?ssl=true",
-  dialect: "postgres",
-  dialectOptions: {
-    ssl: { require: true },
-  },
+  connectionString: process.env.DATABASE_URL,
+  // dialect: "postgres",
+  // dialectOptions: {
+  //   ssl: { require: true },
+  // },
 };
 const pool = new Pool(
   process.env.NODE_ENV === "production" ? productionConfig : devConfig
