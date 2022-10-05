@@ -1,7 +1,4 @@
-const pg = require("pg");
-pg.defaults.ssl = true;
-
-const Pool = pg.Pool;
+const Pool = require("pg").Pool;
 
 require("dotenv").config();
 
