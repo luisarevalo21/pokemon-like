@@ -12,7 +12,6 @@ const devConfig = {
 
 const productionConfig = {
   connectionString: process.env.DATABASE_URL,
-  ssl: true,
 };
 const pool = new Pool(
   process.env.NODE_ENV === "production" ? productionConfig : devConfig
