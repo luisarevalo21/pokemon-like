@@ -1,16 +1,16 @@
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
-
 const express = require("express");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const app = express();
 const PORT = process.env.PORT || 8000; // use either the host env var port (PORT) provided by Heroku or the local port (5000) on your machine
-
 const cors = require("cors");
 const bodyParser = require("body-parser");
+
 const { v4: uuidv4 } = require("uuid");
+const { secret } = require("./config");
 
 const jwt = require("jsonwebtoken");
 // const flash = require("express-flash");
@@ -18,19 +18,30 @@ const session = require("express-session");
 const LocalStrategy = require("passport-local").Strategy;
 
 const path = require("path");
-
+const generateAccessToken = require("./generateToken");
 // const methodOverride = require("method-override");
 
 const initializePassport = require("./passport-config");
 
 initializePassport(passport);
 
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
-// app.use(cors()); // Enable CORS
+app.use(cors({ origin: "http://localhost:8080" }));
+
+// app.use(bodyParser.json());
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+);
 app.use(express.json()); // Recognize Request Objects as JSON objects
-app.use(express.static("build")); // serve static files (css & js) from the 'public' directory
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use(function (req, res, next) {
+  res.header(
+    "Access-Control-Allow-Headers",
+    "x-access-token, Origin, Content-Type, Accept"
+  );
+  next();
+});
 
 if (process.env.NODE_ENV === "production") {
   //also works because index.js is in the root and goes into client and into build
@@ -38,7 +49,6 @@ if (process.env.NODE_ENV === "production") {
 
   app.use(express.static(path.join(__dirname, "client/build")));
 }
-console.log(__dirname);
 // Step 1:
 // app.use(express.static(path.resolve(__dirname, "./client/build")));
 // // Step 2:
@@ -70,113 +80,174 @@ const {
   getLikedPokemon,
 } = require("./db/pokemon");
 
-app.post(
-  "/login",
-  passport.authenticate(
-    "local",
-    // { session: false },
-    // (req, res) => {
-    //   console.log(req.user);
-    //   // const token = jwt.sign({ id: req.user.id }, "jwt_secret");
-    //   // res.json({ token: token });
-    // },
-    {
-      failureRedirect: "/error",
-      successRedirect: "/profile",
-    }
-  )
-);
+// app.get("/profile", (req, res, next) => {
+//   // console.log("profile triggered");
+//   console.log("REQ USER", req.user);
+//   const token = jwt.sign({ id: req.user.id }, "jwt_secret");
+//   res.json({ token: token });
+// });
 
-app.post("/register", (req, res, next) => {
-  const { username, password } = req.body;
-
-  const id = uuidv4();
-  pool.query(
-    "SELECT * FROM users WHERE username = $1",
-    [username],
-    async (err, result) => {
-      // console.log("err", err);
-      if (err) {
-        return next(err);
-      }
-      if (result.rows.length >= 1) {
-        return res.status(400).json({
-          error:
-            "Email already there, No need to register again. Please login instead",
-        });
-      }
-
-      try {
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-        const response = await pool.query(
-          "INSERT INTO users (id, username, password) VALUES($1, $2, $3) RETURNING * ",
-          [id, username, hashedPassword]
-        );
-
-        // Token
-        const token = jwt.sign({ id: response.rows[0].id }, "jwt_secret");
-        res.json({ token: token });
-        // res.json(response.rows[0].id);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  );
-});
-
-app.get("/profile", (req, res, next) => {
-  // console.log("profile triggered");
-  console.log("REQ USER", req.user);
-  const token = jwt.sign({ id: req.user.id }, "jwt_secret");
-  res.json({ token: token });
-});
-
-app.get("/error", (req, res, next) => {
-  console.log("redirected to /");
-  res.json("login");
-});
+// app.get("/error", (req, res, next) => {
+//   console.log("redirected to /");
+//   res.json("login");
+// });
 
 app.post("/pokemon/logout", (req, res, next) => {
-  console.log("logout triggred");
-  req.logout((err, result) => {
-    if (err) return next(err);
-
-    res.redirect("/login");
-  });
-
+  // console.log("logout triggred");
+  // req.logout((err, result) => {
+  //   if (err) return next(err);
+  //   res.redirect("/login");
+  // });
   // res.redirect("/");
   // res.json("logout");
 });
 
 //erroring here on sign up when redirected
 //check why req.authetncated is false
-const checkIsAuthenticated = (req, res, next) => {
-  console.log("check authetniece triggered", req.isAuthenticated());
-  if (req.isAuthenticated()) {
-    return next();
+
+const checkDuplicateUsername = async (req, res, next) => {
+  const { username } = req.body;
+
+  try {
+    const response = await pool.query(
+      "SELECT * from users WHERE username = $1",
+      [username]
+    );
+    const user = response.rows[0];
+    if (user) {
+      return res.status(400).send({
+        message: "Failed! Username is already in use!",
+      });
+    }
+    next();
+  } catch (err) {
+    console.log(err);
   }
-  res.redirect("/error");
 };
-const checkIsNotAuthenticated = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return res.redirect("/error");
+
+app.post("/register", checkDuplicateUsername, async (req, res, next) => {
+  const id = uuidv4();
+  const { username, password } = req.body;
+  try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+    const response = await pool.query(
+      "INSERT INTO users (id, username, password) VALUES($1, $2, $3) RETURNING * ",
+      [id, username, hashedPassword]
+    );
+
+    if (response) {
+      res.json({
+        message: "User was registered successfully!",
+      });
+    }
+    // const token = generateAccessToken(response.rows[0].username);
+
+    // res.json({ token: `Bearer ${token}` });
+    // res.json(response.rows[0].id);
+  } catch (err) {
+    console.log(err);
   }
-  next();
+});
+
+const verifyToken = (req, res, next) => {
+  let token = req.headers["x-access-token"];
+
+  if (!token) {
+    res.sendStatus(403).json({
+      message: "No token provided!",
+    });
+  }
+
+  jwt.verify(token, secret, (err, decoded) => {
+    if (err) {
+      return res.sendStatus(403).json({
+        message: "Unauthorized!",
+      });
+    }
+    req.userId = decoded.id;
+    next();
+  });
 };
+
+//   if (await bcrypt.compare(password, user.password)) {
+//     const token = generateAccessToken(user.username);
+//     res.json({ token: `Bearer ${token}` });
+//   } else {
+//     res.sendStatus(401);
+//   }
+// } catch (err) {
+//   return err;
+// }
+
+// const validateToken = (req, res, next) => {
+//   console.log("vlicated token triggered");
+//   const authHeader = req.headers["authorization"];
+//   console.log("authheader", authHeader);
+//   const token = authHeader && authHeader.split(" ")[1];
+//   console.log("token", token);
+//   if (token == null) return res.sendStatus(401);
+//   jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
+//     if (err) {
+//       return res.sendStatus(403);
+//     }
+//     req.tokenData = decoded;
+//     next();
+//   });
+// };
+// const checkIsAuthenticated = (req, res, next) => {
+//   console.log("check authetniece triggered", req.isAuthenticated());
+//   if (req.isAuthenticated()) {
+//     return next();
+//   }
+//   res.redirect("/error");
+// };
+// const checkIsNotAuthenticated = (req, res, next) => {
+//   if (req.isAuthenticated()) {
+//     return res.redirect("/error");
+//   }
+//   next();
+// };
+
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    const response = await pool.query(
+      "SELECT * from users WHERE username = $1",
+      [username]
+    );
+    const user = response.rows[0];
+
+    if (await bcrypt.compare(password, user.password)) {
+      const token = jwt.sign({ id: user.id }, secret, {
+        expiresIn: 86400,
+      });
+      res.status(200).json({
+        accessToken: token,
+        id: response.rows.id,
+        username: user.username,
+      });
+    } else {
+      res.sendStatus(401);
+    }
+  } catch (err) {
+    return err;
+  }
+});
 
 // app.get("/pokemon", checkIsAuthenticated, getPokemon);
-app.get("/pokemon", getLikedPokemon);
+app.get("/pokemon", verifyToken, getLikedPokemon);
 
-app.post("/pokemon", checkIsAuthenticated, postLikedPokemon);
-app.delete("/pokemon/:id", checkIsAuthenticated, deleteSinglePokemon);
-app.delete("/pokemon", checkIsAuthenticated, clearLikedPokemon);
+app.post("/pokemon", verifyToken, postLikedPokemon);
+app.delete("/pokemon/:id", verifyToken, deleteSinglePokemon);
+app.delete("/pokemon", verifyToken, clearLikedPokemon);
 
-app.get("/login", checkIsNotAuthenticated, (req, res) => {
+app.get("/login", (req, res) => {
   return res.json("login");
 });
 
-app.get("/signup", checkIsNotAuthenticated, (req, res) => {
+app.get("/signup", (req, res) => {
   return res.json("signup");
 });
 
@@ -187,3 +258,20 @@ app.get("*", (req, res) => {
 app.listen(PORT, () => {
   console.log("listening on port", PORT);
 });
+
+// app.post(
+//   "/login",
+//   passport.authenticate(
+//     "local",
+//     // { session: false },
+//     // (req, res) => {
+//     //   console.log(req.user);
+//     //   // const token = jwt.sign({ id: req.user.id }, "jwt_secret");
+//     //   // res.json({ token: token });
+//     // },
+//     {
+//       failureRedirect: "/error",
+//       successRedirect: "/profile",
+//     }
+//   )
+// );

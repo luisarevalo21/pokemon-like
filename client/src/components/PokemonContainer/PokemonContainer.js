@@ -12,13 +12,13 @@ import {
   deleteSinglePokemon,
   logout,
 } from "../../api/index";
-import { checkUserAuthenticated } from "../../util";
 import Container from "../Container";
 
 const PokemonContainer = props => {
   const [pokemon, setPokemon] = useState(null);
   const [likedPokemon, setLikedPokemon] = useState([]);
   const [disableButton, setDisabledButton] = useState(false);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,32 +38,34 @@ const PokemonContainer = props => {
     const result = await liked(pokemon);
     console.log("result in fetched liked pokemon ", result);
 
-    if (checkUserAuthenticated(result)) {
-      props.handleLogout();
-      setLikedPokemon([]);
-
+    if (result) {
+      setLikedPokemon(result);
       return;
     }
-    setLikedPokemon(result);
+    setLikedPokemon([]);
   };
 
+  //handle error  cases
   const postLikedPokemon = async pokemon => {
     const result = await postPokemon(pokemon);
-    if (checkUserAuthenticated(result)) {
-      props.handleLogout();
-      setLikedPokemon([]);
-
+    console.log("result", result);
+    if (result) {
+      setLikedPokemon(result);
       return;
     }
-
-    setLikedPokemon(result);
+    // setError(result);
+    // setLikedPokemon([]);
   };
 
   const handleLike = async pokemon => {
     postLikedPokemon(pokemon);
     const result = await fetchPokemon();
-    setPokemon(result);
-    setDisabledButton(false);
+    console.log("result", result);
+    if (result) {
+      setPokemon(result);
+      //   setDisabledButton(false);
+    }
+    // setError(result);
   };
 
   const handleDislike = async () => {
@@ -80,21 +82,23 @@ const PokemonContainer = props => {
 
   const handleDeleteSinglePokemon = async dexnumber => {
     const result = await deleteSinglePokemon(dexnumber);
-    if (checkUserAuthenticated(result)) {
-      props.handleLogout();
-      setLikedPokemon([]);
 
+    if (result) {
+      setLikedPokemon(result);
       return;
     }
-    setLikedPokemon(result);
+
+    setError(result);
+    // setLikedPokemon([]);
   };
 
   const handleLogout = async () => {
-    const response = await logout();
-    if (response.ok) {
-      props.handleLogout();
-      navigate("/");
-    }
+    logout();
+
+    // if (response.ok) {
+    // props.handleLogout();
+    navigate("/");
+    // }
   };
 
   let pokemonDetails = null;
@@ -121,6 +125,7 @@ const PokemonContainer = props => {
   return (
     <Container>
       <div className={styles.pokeContainer}>
+        {error}
         <Header handleLogout={handleLogout} />
         {pokemonDetails}
         {likedPokemonList}

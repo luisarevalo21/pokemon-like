@@ -1,10 +1,11 @@
 const pool = require("./index");
 
 const getLikedPokemon = (req, res) => {
-  console.log("REQ USER IN GET POKEMON", req.user);
+  console.log("userid", req.userId);
+  // console.log("REQ USER IN GET POKEMON", req.user);
   pool.query(
     "SELECT * FROM pokemon WHERE user_id = $1",
-    [req.user],
+    [req.userId],
     (error, results) => {
       if (error) {
         throw error;
@@ -19,12 +20,15 @@ const getLikedPokemon = (req, res) => {
 };
 
 const postLikedPokemon = (req, res, next) => {
-  console.log("RWQ USER inside post liekd", req.user);
-
-  const userId = req.user;
+  const userId = req.userId;
+  console.log("userid", req.userId);
+  console.log("req.body", req.body);
+  // const {name, dexnumber}
+  // const userId = req.user;
   const id = Number(req.body.dexnumber);
 
   const { name } = req.body;
+  console.log("name", name);
 
   pool.query(
     "INSERT INTO pokemon (id, name, dexnumber, user_id) VALUES($1, $2, $3, $4)",
@@ -33,13 +37,13 @@ const postLikedPokemon = (req, res, next) => {
       if (error) {
         return next(error);
       }
-      res.sendStatus(200);
+      res.sendStatus(201);
     }
   );
 };
 
 const deleteSinglePokemon = (req, res, next) => {
-  const userId = req.user;
+  const userId = req.userId;
   const dexnumber = Number(req.params.id);
 
   console.log("dexnumber", dexnumber);
@@ -55,7 +59,7 @@ const deleteSinglePokemon = (req, res, next) => {
 };
 
 const clearLikedPokemon = (req, res, next) => {
-  const userId = req.user;
+  const userId = req.userId;
   console.log("clear liekd pokemon triggered");
   console.log("userid", userId);
   pool.query(
