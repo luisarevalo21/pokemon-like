@@ -11,6 +11,7 @@ const devConfig = {
 
 const productionConfig = {
   connectionString: process.env.DATABASE_URL,
+  ssl: true,
   // dialect: "postgres",
   // dialectOptions: {
   //   ssl: { require: true },
