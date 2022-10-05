@@ -10,11 +10,12 @@ const devConfig = {
 };
 
 const productionConfig = {
-  user: process.env.PG_USER,
-  localhost: process.env.PG_HOST,
-  database: process.env.PG_DATABASE,
-  password: process.env.PG_PASSWORD,
-  port: process.env.PG_PORT,
+  // user: process.env.PG_USER,
+  // localhost: process.env.PG_HOST,
+  // database: process.env.PG_DATABASE,
+  // password: process.env.PG_PASSWORD,
+  // port: process.env.PG_PORT,
+  connectionString: process.env.DATABASE_URL,
   dialectOptions: {
     ssl: {
       require: true, // This will help you. But you will see nwe error
