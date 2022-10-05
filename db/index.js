@@ -14,13 +14,11 @@ const productionConfig = {
   localhost: process.env.PG_HOST,
   database: process.env.PG_DATABASE,
   password: process.env.PG_PASSWORD,
-  port: process.env.PG_PORT,
-  connectionString: process.env.DATABASE_URL,
+  port: 5432,
+  ssl: true,
+  dialect: "postgres",
   dialectOptions: {
-    ssl: {
-      require: true, // This will help you. But you will see nwe error
-      rejectUnauthorized: false, // This line will fix new error
-    },
+    ssl: { require: true },
   },
 };
 const pool = new Pool(
