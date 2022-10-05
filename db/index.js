@@ -37,11 +37,9 @@ const client = new Client({
 // };
 
 if (process.env.NODE_ENV) {
-  client.connect();
+  // client.connect();
 }
-// const pool = new Pool(
-//   process.env.NODE_ENV === "production" ? productionConfig : devConfig
-// );
+//
 
 // const = require("pg");
 // const connectionString = process.env.DATABASE_URL;
@@ -57,4 +55,4 @@ if (process.env.NODE_ENV) {
 //   port: process.env.DB_PORT,
 // });
 
-module.exports = pool;
+module.exports = client.connect();
