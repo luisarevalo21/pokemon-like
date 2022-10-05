@@ -1,6 +1,4 @@
-const { Client } = require("pg");
 const Pool = require("pg").Pool;
-
 require("dotenv").config();
 
 const devConfig = {
@@ -10,36 +8,23 @@ const devConfig = {
   password: process.env.PG_PASSWORD,
   port: process.env.PG_PORT,
 };
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
+
+const productionConfig = {
+  user: process.env.PG_USER,
+  localhost: process.env.PG_HOST,
+  database: process.env.PG_DATABASE,
+  password: process.env.PG_PASSWORD,
+  port: process.env.PG_PORT,
+  dialectOptions: {
+    ssl: {
+      require: true, // This will help you. But you will see nwe error
+      rejectUnauthorized: false, // This line will fix new error
+    },
   },
-});
-
-// const productionConfig = {
-//   user: process.env.PG_USER,
-//   localhost: process.env.PG_HOST,
-//   database: process.env.PG_DATABASE,
-//   password: process.env.PG_PASSWORD,
-//   port: process.env.PG_PORT,
-//   ssl: true,
-
-//   //   const client = new pg.Client({
-//   //     user: "admin",
-//   //     password: "guest",
-//   //     database: "Employees",
-//   //     port: 5432,
-//   //     host: "localhost",
-//   //     ssl: true
-//   // })
-//   // client.connect();
-// };
-
-if (process.env.NODE_ENV) {
-  // client.connect();
-}
-//
+};
+const pool = new Pool(
+  process.env.NODE_ENV === "production" ? productionConfig : devConfig
+);
 
 // const = require("pg");
 // const connectionString = process.env.DATABASE_URL;
@@ -55,4 +40,4 @@ if (process.env.NODE_ENV) {
 //   port: process.env.DB_PORT,
 // });
 
-module.exports = client.connect();
+module.exports = pool;
