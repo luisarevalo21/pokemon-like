@@ -10,12 +10,7 @@ const devConfig = {
 };
 
 const productionConfig = {
-  user: process.env.PG_USER,
-  localhost: process.env.PG_HOST,
-  database: process.env.PG_DATABASE,
-  password: process.env.PG_PASSWORD,
-  port: 5432,
-  ssl: true,
+  connectionString: process.env.DATABASE_URL + "?ssl=true",
   dialect: "postgres",
   dialectOptions: {
     ssl: { require: true },
