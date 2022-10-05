@@ -74,7 +74,7 @@ export const clearLikedPokemon = async () => {
 // };
 
 export const login = user => {
-  console.log("user", user);
+  // console.log("user", user);
   // console.log("response ", response);
   // const token = localStorage.getItem("token");
   // console.log("token ", token);
@@ -85,7 +85,8 @@ export const login = user => {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
+      "Access-Control-Allow-Origin": "*",
+      // "Access-Control-Allow-Origin": "http://localhost:3000/",
     },
     body: JSON.stringify(user),
   })
@@ -104,7 +105,7 @@ export const signup = user => {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
+      // "Access-Control-Allow-Origin": "http://localhost:3000/",
     },
   })
     .then(res => res.json())
@@ -129,7 +130,7 @@ export const authHeader = () => {
     return {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
+      // "Access-Control-Allow-Origin": "http://localhost:3000/",
       "x-access-token": user.accessToken,
     };
   } else return {};

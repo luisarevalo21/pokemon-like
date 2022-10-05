@@ -25,7 +25,7 @@ const initializePassport = require("./passport-config");
 
 initializePassport(passport);
 
-app.use(cors({ origin: "http://localhost:8080" }));
+app.use(cors({ "Access-Control-Allow-Origin": "*" }));
 
 // app.use(bodyParser.json());
 app.use(
@@ -210,6 +210,7 @@ const verifyToken = (req, res, next) => {
 // };
 
 app.post("/login", async (req, res) => {
+  console.log("login triggered");
   const { username, password } = req.body;
 
   try {
