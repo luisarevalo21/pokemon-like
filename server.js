@@ -244,13 +244,13 @@ app.post("/pokemon", verifyToken, postLikedPokemon);
 app.delete("/pokemon/:id", verifyToken, deleteSinglePokemon);
 app.delete("/pokemon", verifyToken, clearLikedPokemon);
 
-app.get("/login", (req, res) => {
-  return res.json("login");
-});
+// app.get("/login", (req, res) => {
+//   return res.json("login");
+// });
 
-app.get("/signup", (req, res) => {
-  return res.json("signup");
-});
+// app.get("/signup", (req, res) => {
+//   return res.json("signup");
+// });
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client/build/"));

@@ -35,7 +35,7 @@ const Signup = props => {
         navigate("/", { state: { message: response.error } });
       }
 
-      localStorage.setItem("token", response.token);
+      // localStorage.setItem("token", response.token);
       navigate("/", { state: { message: "please login " } });
     }
   };
