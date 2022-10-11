@@ -6,3 +6,4 @@ client/dist/
 
 .env
 node_modules
+config.js

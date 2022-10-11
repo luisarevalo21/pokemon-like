@@ -6,7 +6,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  background-color: rgb(231, 231, 231);
+  background-color: #06283d;
+  /* text-transform: capitalize; */
 }
 
 code {

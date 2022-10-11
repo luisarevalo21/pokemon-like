@@ -3,14 +3,19 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  background-color: #ccc;
-  border-radius: 20px;
-  padding: 5px;
+  background-color: #06283d;
+
+  padding: 0 5%;
+  border-bottom: 5px solid #47b5ff;
+}
+.Header h3 {
+  color: #ccc;
 }
 
 .Header button {
   /* color: white; */
 
+  background-color: #47b5ff;
   border-radius: 3px;
   border: none;
   width: 15%;
@@ -18,3 +23,48 @@
   text-align: center;
   box-shadow: 1px 2px black;
 }
+.search {
+  background-color: #47b5ff;
+}
+.search:disabled {
+  background-color: grey;
+  color: red;
+}
+
+.searchContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.select {
+  min-width: 70%;
+  margin-right: 2%;
+}
+
+/*
+/* 
+.searchContainer {
+  /* display: flex;
+  justify-content: center;
+  align-items: baseline; */
+/* margin: 20px; */
+/* padding: 5%;
+}
+.searchContainer form {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+.searchContainer search {
+  padding: 5%;
+  border-radius: 20px;
+  border: none;
+}
+.searchContainer button {
+  width: 100%;
+  margin-left: 4%;
+  border-radius: 4px;
+  padding: 2%;
+} */

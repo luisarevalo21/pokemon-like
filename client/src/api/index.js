@@ -1,7 +1,10 @@
 import { randomNumber } from "../util";
 
-export const fetchPokemon = async () => {
-  const pokemonNumber = randomNumber();
+export const fetchPokemon = async (value = null) => {
+  let pokemonNumber = null;
+  if (value) {
+    pokemonNumber = value;
+  } else pokemonNumber = randomNumber();
   return fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNumber}`)
     .then(res => res.json())
     .then(data => {

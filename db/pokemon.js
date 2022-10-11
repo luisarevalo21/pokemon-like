@@ -27,12 +27,12 @@ const postLikedPokemon = (req, res, next) => {
   // const userId = req.user;
   const id = Number(req.body.dexnumber);
 
-  const { name } = req.body;
+  const { name, image } = req.body;
   console.log("name", name);
 
   pool.query(
-    "INSERT INTO pokemon (id, name, dexnumber, user_id) VALUES($1, $2, $3, $4)",
-    [id, name, id, userId],
+    "INSERT INTO pokemon (id, name, dexnumber, user_id, img_src) VALUES($1, $2, $3, $4, $5)",
+    [id, name, id, userId, image],
     (error, result) => {
       if (error) {
         return next(error);

@@ -2,8 +2,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   border-radius: 20px;
-  border: 2px solid rgb(0, 123, 255);
+  border: 2px solid #47b5ff;
   padding: 3%;
   margin-top: 3%;
 }
@@ -15,3 +16,23 @@
   width: 30px;
   height: 20px;
 }
+
+.pokemon-details {
+  display: flex;
+  align-items: center;
+  padding: 3%;
+}
+.img-container {
+  width: 100px;
+  height: 100px;
+  padding: 20px;
+}
+.image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+/* .header {
+  max-height: 500px;
+  overflow: scroll;
+} */
