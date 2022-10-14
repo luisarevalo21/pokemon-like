@@ -12,6 +12,9 @@
   color: #ccc;
 }
 
+.Header h3:hover {
+  cursor: pointer;
+}
 .Header button {
   /* color: white; */
 

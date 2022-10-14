@@ -1,0 +1,62 @@
+.evolution-container {
+  /* display: flex;
+  flex-direction: column; */
+  /* justify-content: center; */
+  /* min-height: 600px; */
+  border: 5px solid #47b5ff;
+  background-color: #47b5ff;
+  min-height: 350px;
+}
+.evolution-item-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+.evolution-chain-item:hover {
+  cursor: pointer;
+}
+
+/* .evolution-chain-item {
+  display: flex;
+  flex-direction: column; /* display: flex;
+  flex-direction: column;
+
+  justify-content: space-evenly; */
+
+.evo-image-container {
+  width: 150px;
+  height: 150px;
+  margin: 0 auto;
+}
+
+.pokemon-evo-image {
+  background-color: #47b5ff;
+  border-radius: 50%;
+  border: 5px solid #fff;
+  max-width: 100%;
+  /* object-fit: cover; */
+}
+.pokemon-details {
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-evenly;
+}
+/* .types {
+  display: flex;
+  justify-content: center;
+} */
+.pokemon-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.pokemon-number {
+  text-align: center;
+  text-transform: capitalize;
+  /* font-size: 12px; */
+}
+
+.center {
+  margin: 0 auto;
+}

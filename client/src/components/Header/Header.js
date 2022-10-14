@@ -5,6 +5,7 @@ import Select from "react-select/";
 import { checkSearchValue } from "../../util/index.js";
 import { POKEMON } from "../../util/PokemonList";
 const Header = props => {
+  console.log("props", props);
   const [searchedPokemon, setSearchedPokemon] = useState("");
   const handleLogout = () => {
     props.handleLogout();
@@ -29,6 +30,9 @@ const Header = props => {
       return false;
     }
   };
+  const handleHeaderClicked = () => {
+    props.handleHeaderClicked();
+  };
   const handleSubmit = event => {
     event.preventDefault();
     // console.log("submit triggered");
@@ -36,10 +40,11 @@ const Header = props => {
     // console.log(checkSearchValue(searchedPokemon));
 
     const result = checkSearchValue(searchedPokemon);
+    console.log("result in header", result);
     console.log("searhced ", searchedPokemon);
     if (result) {
       // console.log(checkSearchValue(searchedPokemon));
-      props.fetchSearchedPokemon(result);
+      props.handleSearchedPokemon(result);
       setSearchedPokemon("");
       return;
     }
@@ -48,28 +53,30 @@ const Header = props => {
 
   return (
     <div className={styles.Header}>
-      <h3>Favorite Pokemon</h3>
+      <h3 onClick={handleHeaderClicked}>Favorite Pokemon</h3>
 
-      <div className={styles.searchContainer}>
-        <Select
-          className={styles.select}
-          value={searchedPokemon}
-          options={POKEMON}
-          onChange={handleSearchPokemon}
-          placeholder="Search Pokemon name or number"
-          filterOption={searchByDex}
-          isSearchable
-        />
+      {props.selected ? (
+        <div className={styles.searchContainer}>
+          <Select
+            className={styles.select}
+            value={searchedPokemon}
+            options={POKEMON}
+            onChange={handleSearchPokemon}
+            placeholder="Search Pokemon name or number"
+            filterOption={searchByDex}
+            isSearchable
+          />
 
-        <button
-          type="submit"
-          className={styles.search}
-          onClick={handleSubmit}
-          disabled={searchedPokemon === ""}
-        >
-          Search
-        </button>
-      </div>
+          <button
+            type="submit"
+            className={styles.search}
+            onClick={handleSubmit}
+            disabled={searchedPokemon === ""}
+          >
+            Search
+          </button>
+        </div>
+      ) : null}
       <button onClick={handleLogout}>Logout</button>
     </div>
   );

@@ -5,8 +5,12 @@ import Signup from "./components/Signup/Signup";
 import SelectedPokemon from "./components/SelectedPokemon/SelectedPokemon";
 import { parseJWT } from "./util/index";
 import { logout } from "./api/index";
+import Header from "./components/Header/Header";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function App() {
+  const navigate = useNavigate();
   const AuthVerify = () => {
     const user = localStorage.getItem("user");
     // console.log("user", user);
@@ -20,6 +24,7 @@ function App() {
       return true;
     }
   };
+
   const Protected = ({ isLoggedIn, children }) => {
     const result = AuthVerify();
     // console.log("result", result);
@@ -33,6 +38,18 @@ function App() {
 
     if (result) return <Navigate to="/pokemon" replace />;
     return children;
+  };
+  const handleHeaderClicked = () => {
+    console.log("handle header clicked");
+    navigate("/pokemon");
+  };
+  const handleLogout = async () => {
+    logout();
+
+    // if (response.ok) {
+    // props.handleLogout();
+    navigate("/");
+    // }
   };
 
   return (
@@ -70,6 +87,11 @@ function App() {
           path="/pokemon/:id"
           element={
             <Protected>
+              <Header
+                handleLogout={handleLogout}
+                selected={false}
+                handleHeaderClicked={handleHeaderClicked}
+              />
               <SelectedPokemon />
             </Protected>
           }
