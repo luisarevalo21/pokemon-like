@@ -72,7 +72,6 @@ const PokemonContainer = props => {
   };
 
   const handleClickedPokmeon = dexnumber => {
-    console.log("pokemon clicekd trigged");
     navigate(`/pokemon/${dexnumber}`);
   };
 
@@ -99,6 +98,15 @@ const PokemonContainer = props => {
     clearLikedPokemon();
   };
 
+  const handleLogout = async () => {
+    logout();
+
+    // if (response.ok) {
+    // props.handleLogout();
+    navigate("/");
+    // }
+  };
+
   const handleDeleteSinglePokemon = async dexnumber => {
     const result = await deleteSinglePokemon(dexnumber);
 
@@ -109,15 +117,6 @@ const PokemonContainer = props => {
 
     setError(result);
     // setLikedPokemon([]);
-  };
-
-  const handleLogout = async () => {
-    logout();
-
-    // if (response.ok) {
-    // props.handleLogout();
-    navigate("/");
-    // }
   };
 
   let pokemonDetails = null;
@@ -146,8 +145,9 @@ const PokemonContainer = props => {
     <Container>
       <div className={styles.pokeContainer}>
         <Header
+          handleSearchedPokemon={handleSearchedPokemon}
           handleLogout={handleLogout}
-          fetchSearchedPokemon={handleSearchedPokemon}
+          selected={true}
         />
         <div className={styles.error}>
           <p>{error}</p>
