@@ -31,18 +31,11 @@ const Login = props => {
     setPassword("");
     setUsername("");
 
-    console.log("response", accessToken);
-
     if (accessToken) {
       console.log("inside if");
-      // props.handleUserId(response);
       navigate("/pokemon");
     }
     setError("Error occured try signing in again");
-
-    // setPassword("");
-    // setUsername("");
-    // navigate("/pokemon");
   };
 
   const handleChange = (event, inputName) => {

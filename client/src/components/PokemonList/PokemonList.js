@@ -9,6 +9,8 @@ const PokemonList = props => {
         key={pokemon.dexnumber}
         dexnumber={pokemon.dexnumber}
         handleDeletePokemon={props.handleDeletePokemon}
+        img={pokemon["img_src"]}
+        handleClickedPokmeon={props.handleClickedPokmeon}
       />
     ));
   }

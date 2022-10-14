@@ -2,17 +2,28 @@ import React from "react";
 import styles from "./PokemonListItem.module.css";
 import { captalzieFirstLetter } from "../../util";
 const PokemonListItem = props => {
-  const { dexnumber } = props;
+  const { dexnumber, img } = props;
 
   const name = captalzieFirstLetter(props.name);
   const handleDeletePokemon = dexnumber => {
     props.handleDeletePokemon(dexnumber);
   };
+  const handleClickedPokemon = dexnumber => {
+    props.handleClickedPokmeon(dexnumber);
+  };
   return (
-    <div className={styles.container}>
-      <p>
-        {name} | #{props.dexnumber}
-      </p>
+    <div
+      className={styles.container}
+      onClick={() => handleClickedPokemon(dexnumber)}
+    >
+      <div className={styles["pokemon-details"]}>
+        <div className={styles["img-container"]}>
+          <img alt="pokemon" src={img} className={styles.image} />
+        </div>
+        <p>
+          {name} | #{props.dexnumber}
+        </p>
+      </div>
 
       <button
         className={styles["clear-button"]}

@@ -12,6 +12,7 @@ import {
   deleteSinglePokemon,
   logout,
 } from "../../api/index";
+import { searchCurrentLikedPokemon } from "../../util/index";
 import Container from "../Container";
 
 const PokemonContainer = props => {
@@ -34,9 +35,15 @@ const PokemonContainer = props => {
 
   //fetch liked pokemon and add the new one to the list.
 
+  const handleSearchedPokemon = async searchedPokemon => {
+    const result = await fetchPokemon(searchedPokemon);
+    console.log("reslt", result);
+    if (result) {
+      setPokemon(result);
+    }
+  };
   const fetchLikedPokemon = async (pokemon = null) => {
     const result = await liked(pokemon);
-    console.log("result in fetched liked pokemon ", result);
 
     if (result) {
       setLikedPokemon(result);
@@ -47,14 +54,26 @@ const PokemonContainer = props => {
 
   //handle error  cases
   const postLikedPokemon = async pokemon => {
-    const result = await postPokemon(pokemon);
-    console.log("result", result);
-    if (result) {
-      setLikedPokemon(result);
-      return;
+    const foundPokmeon = searchCurrentLikedPokemon(likedPokemon, pokemon);
+    console.log("found", foundPokmeon);
+
+    if (foundPokmeon === undefined) {
+      const result = await postPokemon(pokemon);
+      console.log("result", result);
+      if (result) {
+        setLikedPokemon(result);
+        return;
+      }
     }
+    setError(`${foundPokmeon.name} already liked! Try searching for another `);
+
     // setError(result);
     // setLikedPokemon([]);
+  };
+
+  const handleClickedPokmeon = dexnumber => {
+    console.log("pokemon clicekd trigged");
+    navigate(`/pokemon/${dexnumber}`);
   };
 
   const handleLike = async pokemon => {
@@ -117,6 +136,7 @@ const PokemonContainer = props => {
     likedPokemonList = (
       <PokemonList
         likedPokemon={likedPokemon}
+        handleClickedPokmeon={handleClickedPokmeon}
         handleDeletePokemon={handleDeleteSinglePokemon}
       />
     );
@@ -125,8 +145,13 @@ const PokemonContainer = props => {
   return (
     <Container>
       <div className={styles.pokeContainer}>
-        {error}
-        <Header handleLogout={handleLogout} />
+        <Header
+          handleLogout={handleLogout}
+          fetchSearchedPokemon={handleSearchedPokemon}
+        />
+        <div className={styles.error}>
+          <p>{error}</p>
+        </div>
         {pokemonDetails}
         {likedPokemonList}
       </div>
