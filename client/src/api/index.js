@@ -1,7 +1,5 @@
 import { randomNumber } from "../util";
 
-const baseURL = `http://localhost:8000/pokemon`;
-
 export const fetchPokemon = async () => {
   const pokemonNumber = randomNumber();
   return fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonNumber}`)
@@ -17,52 +15,54 @@ export const fetchPokemon = async () => {
 };
 
 export const fetchLikedPokemon = async (pokemon = null) => {
-  return fetch(`http://localhost:8000/pokemon`, {
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
-    },
+  // const response = authHeader();
+  return fetch("/pokemon", {
+    // credentials: "include",
+    headers: authHeader(),
   })
     .then(res => res.json())
     .then(data => data);
 };
 
 export const postLikedPokemon = pokemon => {
-  return fetch(`http://localhost:8000/pokemon`, {
+  console.log("pokemon", pokemon);
+
+  return fetch("/pokemon", {
     method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
-    },
+    headers: authHeader(),
     body: JSON.stringify(pokemon),
   })
     .then(res => {
-      if (res.ok) {
+      console.log(res);
+      if (res.status === 201) {
         return fetchLikedPokemon();
       }
     })
-    .catch(err => console.log(err));
+
+    .catch(err => err);
 };
 
+// headers: headers{
 export const deleteSinglePokemon = dexnumber => {
-  return fetch(`http://localhost:8000/pokemon/${dexnumber}`, {
+  return fetch(`/pokemon/${dexnumber}`, {
     method: "DELETE",
-    credentials: "include",
+    headers: authHeader(),
+    // credentials: "include",
   })
     .then(res => {
-      if (res.ok) {
+      if (res.status === 201) {
         return fetchLikedPokemon();
       }
     })
-    .catch(error => console.log(error));
+    .catch(error => error);
 };
 
 export const clearLikedPokemon = async () => {
-  fetch(baseURL, { method: "DELETE" }, { credentials: "include" })
+  return fetch("/pokemon", {
+    method: "DELETE",
+    credentials: "include",
+    headers: authHeader(),
+  })
     .then(res => {
       if (res.ok) {
         return res;
@@ -71,39 +71,41 @@ export const clearLikedPokemon = async () => {
     .catch(err => console.log(err));
 };
 
-export const deleteLikedPokemon = async id => {
-  console.log("Id", id);
-  const response = await fetch(`${baseURL}/${id}`, { method: "DELETE" });
-  console.log(response);
-};
+// };
 
 export const login = user => {
-  return fetch(`http://localhost:8000/login`, {
+  // console.log("user", user);
+  // console.log("response ", response);
+  // const token = localStorage.getItem("token");
+  // console.log("token ", token);
+  return fetch("/login", {
     method: "POST",
 
-    credentials: "include",
+    // credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
+      "Access-Control-Allow-Origin": "*",
+      // "Access-Control-Allow-Origin": "http://localhost:3000/",
     },
     body: JSON.stringify(user),
   })
     .then(res => res.json())
     .then(data => {
-      // console.log("response", data);
+      localStorage.setItem("user", JSON.stringify(data));
+
       return data;
     });
 };
 export const signup = user => {
-  return fetch(`http://localhost:8000/register`, {
+  return fetch("/register", {
     method: "POST",
     body: JSON.stringify(user),
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "Access-Control-Allow-Origin": "http://localhost:3000/",
+      // "Access-Control-Allow-Origin": "http://localhost:3000/",
     },
   })
     .then(res => res.json())
@@ -111,8 +113,25 @@ export const signup = user => {
 };
 
 export const logout = () => {
-  return fetch("http://localhost:8000/pokemon/logout", {
-    method: "DELETE",
-    credentials: "same-origin",
-  });
+  // return fetch("/pokemon/logout", { method: "POST" }).then(res =>
+  localStorage.removeItem("user");
+
+  // );
+};
+
+export const getCurrentUser = () => {
+  return JSON.parse(localStorage.getItem("user"));
+};
+
+export const authHeader = () => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  // console.log("uesr", user);
+  if (user && user.accessToken) {
+    return {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      // "Access-Control-Allow-Origin": "http://localhost:3000/",
+      "x-access-token": user.accessToken,
+    };
+  } else return {};
 };

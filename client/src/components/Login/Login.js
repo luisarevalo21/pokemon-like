@@ -24,14 +24,18 @@ const Login = props => {
       username,
       password,
     };
+
     const response = await login(user);
-
-    // console.log("response", response);
-
+    console.log("response", response);
+    const { accessToken } = response;
     setPassword("");
     setUsername("");
-    if (response !== "login") {
-      props.handleUserId(response);
+
+    console.log("response", accessToken);
+
+    if (accessToken) {
+      console.log("inside if");
+      // props.handleUserId(response);
       navigate("/pokemon");
     }
     setError("Error occured try signing in again");

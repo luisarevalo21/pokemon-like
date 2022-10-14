@@ -1,34 +1,19 @@
 import PokemonContainer from "./components/PokemonContainer/PokemonContainer";
-import {
-  NavLink,
-  Route,
-  Routes,
-  Navigate,
-  useNavigate,
-} from "react-router-dom";
+import { NavLink, Route, Routes, Navigate } from "react-router-dom";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
-import { useEffect, useState } from "react";
 
 function App() {
-  const [userId, setUserId] = useState("");
-  const navigate = useNavigate();
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const handleUserId = id => {
-    setUserId(id);
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = () => {
-    console.log("logout triggered");
-    setUserId("");
-    setIsLoggedIn(false);
-    navigate("/");
-  };
-
   const Protected = ({ isLoggedIn, children }) => {
-    if (!isLoggedIn) return <Navigate to="/" replace />;
+    const token = localStorage.getItem("user");
+
+    if (!token) return <Navigate to="/" replace />;
+
+    return children;
+  };
+  const UserLoggedIn = ({ children }) => {
+    const token = localStorage.getItem("user");
+    if (token) return <Navigate to="/pokemon" replace />;
     return children;
   };
 
@@ -48,25 +33,30 @@ function App() {
 
       <Routes>
         <Route
-          exact
           path="/"
-          element={<Login handleUserId={handleUserId} />}
+          element={
+            <UserLoggedIn>
+              <Login />
+            </UserLoggedIn>
+          }
         ></Route>
         <Route
           path="/signup"
-          element={<Signup handleUserId={handleUserId} />}
+          element={
+            <UserLoggedIn>
+              <Signup />
+            </UserLoggedIn>
+          }
         ></Route>
 
         <Route
           path="/pokemon"
           element={
-            // <Protected isLoggedIn={isLoggedIn}>
-            <PokemonContainer userId={userId} handleLogout={handleLogout} />
-            // </Protected>
+            <Protected>
+              <PokemonContainer />
+            </Protected>
           }
         ></Route>
-
-        {/* <Route path="/profile" element={<h1> hello from porifle</h1>}></Route> */}
       </Routes>
     </>
   );

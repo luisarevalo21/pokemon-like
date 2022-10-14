@@ -27,6 +27,7 @@ const Signup = props => {
       };
 
       const response = await signup(user);
+      console.log("response", response);
       setPassword("");
       setUsername("");
       if (response.error) {
@@ -34,6 +35,7 @@ const Signup = props => {
         navigate("/", { state: { message: response.error } });
       }
 
+      // localStorage.setItem("token", response.token);
       navigate("/", { state: { message: "please login " } });
     }
   };
