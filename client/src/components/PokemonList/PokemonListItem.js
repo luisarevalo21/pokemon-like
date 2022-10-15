@@ -12,11 +12,11 @@ const PokemonListItem = props => {
     props.handleClickedPokmeon(dexnumber);
   };
   return (
-    <div
-      className={styles.container}
-      onClick={() => handleClickedPokemon(dexnumber)}
-    >
-      <div className={styles["pokemon-details"]}>
+    <div className={styles.container}>
+      <div
+        className={styles["pokemon-details"]}
+        onClick={() => handleClickedPokemon(dexnumber)}
+      >
         <div className={styles["img-container"]}>
           <img alt="pokemon" src={img} className={styles.image} />
         </div>
