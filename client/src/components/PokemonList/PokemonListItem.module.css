@@ -16,11 +16,23 @@
   width: 30px;
   height: 20px;
 }
+.clear-button:hover {
+  cursor: pointer;
+  transform: scale(1.5);
+}
 
+.clear-button:focus {
+  width: 50px;
+}
 .pokemon-details {
   display: flex;
   align-items: center;
   padding: 3%;
+}
+.pokemon-details:hover {
+  cursor: pointer;
+  transform: scale(1.5);
+  /* background-color: white; */
 }
 .img-container {
   width: 100px;
