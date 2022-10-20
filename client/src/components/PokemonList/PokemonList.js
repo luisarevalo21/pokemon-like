@@ -2,6 +2,7 @@ import React from "react";
 import PokemonListItem from "./PokemonListItem";
 import styles from "./PokemonListItem.module.css";
 const PokemonList = props => {
+  console.log("pokemon", props.likedPokemon);
   if (props.likedPokemon.length !== 0) {
     return props.likedPokemon.map(pokemon => (
       <PokemonListItem

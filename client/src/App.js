@@ -3,6 +3,7 @@ import { NavLink, Route, Routes, Navigate } from "react-router-dom";
 import Login from "./components/Login/Login";
 import Signup from "./components/Signup/Signup";
 import SelectedPokemon from "./components/SelectedPokemon/SelectedPokemon";
+import TestingComponent from "./TestingComponents/TestingComponent";
 import { parseJWT } from "./util/index";
 import { logout } from "./api/index";
 import Header from "./components/Header/Header";
@@ -75,6 +76,22 @@ function App() {
             </UserLoggedIn>
           }
         ></Route>
+
+        <Route path="/test" element={<TestingComponent />}></Route>
+        <Route
+          path="/test/:id"
+          element={
+            <>
+              <Header
+                handleLogout={handleLogout}
+                selected={false}
+                handleHeaderClicked={handleHeaderClicked}
+              />
+              <SelectedPokemon />
+            </>
+          }
+        ></Route>
+
         <Route
           path="/signup"
           element={
