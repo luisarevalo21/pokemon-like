@@ -5,7 +5,7 @@ import Select from "react-select/";
 import { checkSearchValue } from "../../util/index.js";
 import { POKEMON } from "../../util/PokemonList";
 const Header = props => {
-  console.log("props", props);
+  // console.log("props", props);
   const [searchedPokemon, setSearchedPokemon] = useState("");
   const handleLogout = () => {
     props.handleLogout();

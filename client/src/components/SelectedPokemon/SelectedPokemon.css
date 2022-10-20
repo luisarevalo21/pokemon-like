@@ -46,6 +46,7 @@
   align-items: center;
   text-transform: capitalize;
   font-weight: 400;
+  justify-content: center;
 }
 .types span {
   border: 5px solid grey;

@@ -33,11 +33,11 @@ const SelectedPokemon = () => {
         const evoChain = await fetchPokemonEvolutionChain(result, pokemonId);
         if (pokemonId >= 1) {
           const result = await fetchPokemon(pokemonId + 1);
-          console.log(result);
+          // console.log(result);
           setNextPokemon(result);
         }
         if (pokemonId !== 1) {
-          console.log("inside  !== 1");
+          // console.log("inside  !== 1");
           const result = await fetchPokemon(pokemonId - 1);
           setPrevPokemon(result);
         }

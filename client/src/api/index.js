@@ -52,28 +52,163 @@ export const fetchPokemonEvolutionChain = async pokemon => {
   await fetch(`${url}`)
     .then(res => res.json())
     .then(data => {
+      // console.log("data for cascoon", data);
       // console.log("data", data);
-      if (data.chain["evolves_to"].length === 0) {
-        chain.push({
-          species: data.chain.species,
-        });
-      } else if (data.chain["evolves_to"].length === 1) {
-        chain.push(
-          { species: data.chain.species },
-          { species: data.chain["evolves_to"][0].species },
-          { species: data.chain["evolves_to"][0]["evolves_to"][0].species }
-        );
-      }
+      // if (data.chain["evolves_to"].length === 0) {
+      //   chain.push({
+      //     species: data.chain.species,
+      //   });
+      // } else if (data.chain["evolves_to"].length === 1) {
+      //   chain.push(
+      //     { species: data.chain.species },
+      //     { species: data.chain["evolves_to"][0].species },
+      //     { species: data.chain["evolves_to"][0]["evolves_to"][0].species }
+      //   );
+      // }
       // chain.push(
       //   { species: data.chain.species },
       //   { species: data.chain["evolves_to"] },
       //   { species: data.chain["evolves_to"][0]["evolves_to"][0] }
       // );
+      chain.push({
+        species: data.chain.species,
+      });
+
+      //first evolution
+      if (data.chain["evolves_to"].length !== 0) {
+        if (data.chain["evolves_to"].length === 2) {
+          chain[0].evolvesTo = [];
+          data.chain.evolves_to.forEach(pokemonEvo => {
+            // console.log("pokemonevo", pokemonEvo.species.name);
+
+            chain[0].evolvesTo.push({
+              trigger: pokemonEvo.evolution_details[0].trigger.name,
+              item: pokemonEvo.evolution_details[0].held_item,
+              species: pokemonEvo.species,
+            });
+
+            // if (pokemonEvo.evolution_details[0].trigger.name === "trade") {
+            //   chain[0].evolutionTrigger.push({
+            //     trigger: pokemonEvo.evolution_details[0].trigger.name,
+            //     pokemonEvo: pokemonEvo.species.name,
+            //     item: pokemonEvo.evolution_details[0].held_item.name,
+            //   });
+            // } else
+            // chain[0].evolutionTrigger.push({
+            //   trigger: pokemonEvo.evolution_details[0].trigger.name,
+            //   pokemonEvo: pokemonEvo.species.name,
+            // });
+          });
+        } else {
+          data.chain.evolves_to.forEach(pokemonEvo => {
+            console.log("pokemonevo", pokemonEvo.species.name);
+            chain.push({
+              species: pokemonEvo.species,
+            });
+            chain[0].evolvesTo = [
+              {
+                trigger: pokemonEvo.evolution_details[0].trigger.name,
+                species: pokemonEvo.species.name,
+              },
+            ];
+          });
+        }
+      }
+
+      //second evolution
+      console.log(
+        "data.chain[][0]",
+        data.chain["evolves_to"][0].evolves_to.length
+      );
+
+      if (data.chain["evolves_to"][0].evolves_to.length !== 0) {
+        chain[1].evolvesTo = [];
+        data.chain.evolves_to[0].evolves_to.forEach(pokemonEvo => {
+          console.log("pokemonevo", pokemonEvo.species.name);
+
+          chain[1].evolvesTo.push({
+            trigger: pokemonEvo.evolution_details[0].trigger.name,
+            item: pokemonEvo.evolution_details[0].held_item,
+            species: pokemonEvo.species,
+          });
+        });
+      }
+
+      // console.log(
+      //   " pokemonEvo.evolution_details[0].trigger.name;",
+      //   pokemonEvo.evolution_details[0].trigger.name
+      // );
+
+      // chain[length - 1].evolutionTrigger =
+      //   pokemonEvo.evolution_details[0].trigger.name;
+      // });
+
+      // console.log("chain 1", chain[1].evolvesTo[0].species);
+      console.log("chain 1", chain);
+      if (chain.length !== 1) {
+        if (chain[1].evolvesTo.length === 1) {
+          chain.push({
+            species: chain[1].evolvesTo[0].species,
+            evolvesTo: [],
+          });
+        }
+      } else {
+        chain[0].evolvesTo.forEach(pokeEvo => {
+          chain.push({
+            species: pokeEvo.species,
+            evolvesTo: [],
+          });
+        });
+      }
+      console.log("chain", chain);
+      // if (data.chain["evolves_to"][0]["evolves_to"].length !== 0) {
+      //   // data.chain["evolves_to"][0]["evolves_to"];
+      //   const length = chain.length;
+      //   data.chain.evolves_to[0].evolves_to.forEach((pokemonEvo, index) => {
+      //     chain.push({
+      //       species: pokemonEvo.species,
+      //     });
+
+      //     chain[length - 1].evolutionTrigger =
+      //       pokemonEvo.evolution_details[0].trigger.name;
+      //   });
+      // }
     });
 
+  // console.log("isnide second evolution");
+  // data.chain.evolves_to["evolves_to"][0].forEach((pokemonEvo, index) => {
+  //   chain.push({
+  //     species: pokemonEvo.species,
+  //   });
+  //   chain[index].evolutionTrigger =
+  //     pokemonEvo.evolution_details[0].trigger.name;
+  // });
+
+  // data.chain.evolves_to.map(pokemonEvo => {
+  //   return {
+  //     species: pokemonEvo.species.name,
+  //   };
+  // });
+
+  // chain.push({ species: data.chain["evolves_to"][0].species });
+
+  // if (data.chain["evolves_to"][0]["evolves_to"].length !== 0) {
+  //   chain.push({
+  //     species: data.chain["evolves_to"][0]["evolves_to"][0].species,
+  //   });
+  // }
+
   const result = await Promise.all(
-    chain.map(evo => fetchPokemon(evo.species.name))
+    chain.map(async evo => {
+      const res = await fetchPokemon(evo.species.name);
+      return {
+        ...res,
+        evolvesTo: evo.evolvesTo,
+      };
+      // fetchPokemon(evo.species.name), evolutionTrigger: evo,})
+    })
   );
+  console.log("result", result);
   return result;
 };
 
