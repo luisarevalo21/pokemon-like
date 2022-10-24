@@ -11,7 +11,7 @@ const EvolutionChainItem = props => {
   const center = type2 == null ? "center" : null;
 
   const icon =
-    index <= 1 && index < length ? (
+    index <= 1 && index < length - 1 ? (
       <div className="icon">
         {/* <p> {props.evolutionTrigger}</p>{" "} */}
         <i className="fa-solid fa-circle-chevron-right"></i>
@@ -42,7 +42,6 @@ const EvolutionChainItem = props => {
             {type2 !== null ? <span className={type2}>{type2}</span> : null}
           </div>
         </div>
-
         {icon}
       </div>
     </div>
