@@ -4,3 +4,9 @@
   background-color: #dff6ff;
   border-radius: 1%;
 }
+
+@media (max-width: 500px) {
+  .container {
+    width: 100%;
+  }
+}

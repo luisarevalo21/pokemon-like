@@ -45,6 +45,33 @@
   min-width: 70%;
   margin-right: 2%;
 }
+.header-name {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media (max-width: 500px) {
+  .Header {
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+  }
+
+  .Header h3 {
+    text-align: left;
+  }
+  .header-name {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 100%;
+    align-items: center;
+  }
+  .header-name button {
+    width: auto;
+    height: 30px;
+  }
+}
 
 /*
 /* 

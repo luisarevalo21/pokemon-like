@@ -126,3 +126,14 @@
 .center {
   margin: 0 auto;
 }
+
+@media (max-width: 500px) {
+  .header-prev {
+    width: 30%;
+    padding: 1%;
+  }
+  .header-next {
+    width: 30%;
+    padding: 1%;
+  }
+}

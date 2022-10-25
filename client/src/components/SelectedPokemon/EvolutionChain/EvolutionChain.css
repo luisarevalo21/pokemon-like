@@ -127,3 +127,26 @@
   margin: 0;
   margin-bottom: 5%;
 }
+
+@media (max-width: 500px) {
+  .evolution-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .icon {
+    -webkit-transform: rotate(45deg);
+    -moz-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(90deg);
+    padding: 5%;
+  }
+  .evolution-container-item {
+    flex-direction: column;
+    /* padding: 13%; */
+  }
+  /* .evolution-item-container {
+    flex-direction: column;
+  } */
+}

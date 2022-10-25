@@ -32,3 +32,9 @@ a {
 .login button:hover {
   cursor: pointer;
 }
+
+@media (max-width: 500px) {
+  .login {
+    width: 100%;
+  }
+}

@@ -1,16 +1,33 @@
 import React, { useState } from "react";
 import styles from "./Header.module.css";
 
+import useWindowDimensions from "./getWindowSize";
 import Select from "react-select/";
 import { checkSearchValue } from "../../util/index.js";
 import { POKEMON } from "../../util/PokemonList";
 const Header = props => {
   // console.log("props", props);
   const [searchedPokemon, setSearchedPokemon] = useState("");
+  const { width, height } = useWindowDimensions();
   const handleLogout = () => {
     props.handleLogout();
   };
 
+  const handleHeaderClicked = () => {
+    props.handleHeaderClicked();
+  };
+  const mobileHeader =
+    width < 500 ? (
+      <div className={styles["header-name"]}>
+        <h3 onClick={handleHeaderClicked}>Favorite Pokemon</h3>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
+    ) : null;
+
+  const regularHeader =
+    width > 500 ? (
+      <h3 onClick={handleHeaderClicked}>Favorite Pokemon</h3>
+    ) : null;
   const handleSearchPokemon = selectOption => {
     console.log("slect option", selectOption);
     // console.log("event", e);
@@ -30,9 +47,7 @@ const Header = props => {
       return false;
     }
   };
-  const handleHeaderClicked = () => {
-    props.handleHeaderClicked();
-  };
+
   const handleSubmit = event => {
     event.preventDefault();
     // console.log("submit triggered");
@@ -53,8 +68,8 @@ const Header = props => {
 
   return (
     <div className={styles.Header}>
-      <h3 onClick={handleHeaderClicked}>Favorite Pokemon</h3>
-
+      {regularHeader}
+      {mobileHeader}
       {props.selected ? (
         <div className={styles.searchContainer}>
           <Select
@@ -77,7 +92,7 @@ const Header = props => {
           </button>
         </div>
       ) : null}
-      <button onClick={handleLogout}>Logout</button>
+      {width > 500 ? <button onClick={handleLogout}>Logout</button> : null}{" "}
     </div>
   );
 };
