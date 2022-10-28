@@ -28,9 +28,11 @@ function App() {
   const Protected = ({ isLoggedIn, children }) => {
     const result = AuthVerify();
     console.log("result", result);
-    if (result === undefined) return <Navigate to="/" replace />;
+    if (result) return children;
 
-    return children;
+    return <Navigate to="/" replace />;
+
+    // return children;
   };
   const UserLoggedIn = ({ children }) => {
     const result = AuthVerify();
