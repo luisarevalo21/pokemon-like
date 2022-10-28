@@ -476,7 +476,7 @@ export const getCurrentUser = () => {
 
 export const authHeader = () => {
   const user = JSON.parse(localStorage.getItem("user"));
-  // console.log("uesr", user);
+  console.log("uesr", user);
   if (user && user.accessToken) {
     return {
       "Content-Type": "application/json",
@@ -484,5 +484,5 @@ export const authHeader = () => {
       // "Access-Control-Allow-Origin": "http://localhost:3000/",
       "x-access-token": user.accessToken,
     };
-  } else return {};
+  } else return null;
 };

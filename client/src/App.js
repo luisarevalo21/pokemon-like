@@ -13,7 +13,7 @@ function App() {
   const navigate = useNavigate();
   const AuthVerify = () => {
     const user = localStorage.getItem("user");
-    // console.log("user", user);
+    console.log("user", user);
     if (user) {
       const decodedJwt = parseJWT(user);
       // console.log(decodedJwt);

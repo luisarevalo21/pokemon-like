@@ -109,6 +109,7 @@ app.post("/register", checkDuplicateUsername, async (req, res, next) => {
 });
 
 const verifyToken = (req, res, next) => {
+  // console.log("req.headers", req.headers);
   let token = req.headers["x-access-token"];
   console.log("token ", token);
   if (!token) {
