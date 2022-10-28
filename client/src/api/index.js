@@ -484,5 +484,5 @@ export const authHeader = () => {
       // "Access-Control-Allow-Origin": "http://localhost:3000/",
       "x-access-token": user.accessToken,
     };
-  } else return null;
+  } else return {};
 };

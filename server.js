@@ -109,9 +109,9 @@ app.post("/register", checkDuplicateUsername, async (req, res, next) => {
 });
 
 const verifyToken = (req, res, next) => {
-  // console.log("req.headers", req.headers);
+  console.log("req.headers inside verify token", req.headers);
   let token = req.headers["x-access-token"];
-  console.log("token ", token);
+  console.log("token inside verify token is ", token);
   if (!token) {
     res.sendStatus(403).json({
       message: "No token provided!",
